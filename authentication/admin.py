@@ -16,14 +16,23 @@ class UserAdmin(BaseUserAdmin):
     ]
     list_filter = ["is_staff"]
     fieldsets = [
-        ("User Credentials", {"fields": ["email", "password"]}),
+        ("User Credentials", {"fields": [
+            "email",
+            "password"
+            ]}),
         ("Personal info", {"fields":
                            ["first_name",
                             "last_name",
                             "type",
                             "profile_image"]
                            }),
-        ("Permissions", {"fields": ["is_staff", "is_superuser", "is_active"]}),
+        ("Permissions", {"fields": [
+            "is_staff",
+            "is_superuser",
+            "is_active",
+            "groups",
+            "user_permissions"
+            ]}),
     ]
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -49,5 +58,5 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = []
 
 
-# admin.site.register(User, UserAdmin)
-admin.site.register(User)
+admin.site.register(User, UserAdmin)
+# admin.site.register(User)

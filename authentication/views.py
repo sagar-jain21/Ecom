@@ -26,9 +26,11 @@ class RegisterView(TemplateView):
     def post(self, request, *args, **kwargs):
 
         form = CreateUserForm(request.POST, request.FILES)
-
         if form.is_valid():
-            breakpoint()
+            # new_user = form.save(commit=False)
+            # password = form.cleaned_data['password1']
+            # new_user.set_password(password)
+            # new_user.save()
             form.save()
             return redirect('/login')
 
@@ -61,7 +63,7 @@ class LoginView(TemplateView):
     def post(self, request, *args, **kwargs):
 
         form = CreateUserForm()
-        # breakpoint()
+
         email = request.POST.get('email')
         password = request.POST.get('password1')
 

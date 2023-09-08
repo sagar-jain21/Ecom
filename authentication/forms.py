@@ -1,8 +1,9 @@
 from authentication.models import User
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 
 
-class CreateUserForm(forms.ModelForm):
+class CreateUserForm(UserCreationForm):
 
     password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={
@@ -50,7 +51,7 @@ class CreateUserForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Password'
                 }),
-            "password2": forms.PasswordInput(attrs={
+            "confirm_password": forms.PasswordInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Confirm Password'
                 }),
