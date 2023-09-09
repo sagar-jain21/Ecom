@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from product.models import Product
 from django.views.generic.base import TemplateView
+from django.views.generic import DeleteView, UpdateView
+from django.views.generic import View
 from product.forms import ProductForm
 
 
@@ -8,6 +10,7 @@ class SellerProducts(TemplateView):
 
     def get(self, request, *args, **kwargs):
 
+        product_form = ProductForm()
         products = Product.objects.all()
 
         return render(
@@ -15,5 +18,108 @@ class SellerProducts(TemplateView):
             template_name='seller/products.html',
             context={
                 "all_products": products,
+                "product_form": product_form,
             }
         )
+
+
+class SellerProductsCreateView(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+
+        product_form = ProductForm()
+
+        return render(
+            request,
+            template_name='seller/seller_products.html',
+            context={
+                "product_form": product_form,
+            }
+        )
+
+    def post(self, request, *args, **kwargs):
+
+        product_form = ProductForm(request.POST, request.FILES)
+
+        if product_form.is_valid():
+            # #Commented logic will be used when we don't include the user field in the form
+            # product = product_form.save(commit=False)
+            # product.user = request.user
+            # product.save()
+            product_form.instance.user = request.user
+            product_form.save()
+
+            return redirect('/products')
+
+        return render(
+            request,
+            template_name='seller/seller_products.html',
+            context={
+                "product_form": product_form,
+            }
+        )
+
+
+class SellerProductDeleteView(DeleteView):
+
+    model = Product
+    success_url = '/products'
+    template_name = 'seller/product_confirm_delete.html'
+
+
+# class SellerProductUpdateView(UpdateView):
+#     model = Product
+#     form_class = ProductForm
+#     success_url = '/products'
+#     template_name = 'seller/product_update.html'
+#     context_object_name = 'product_form'
+
+#     def form_valid(self, form):
+#         form.instance.user = self.request.user
+#         return super().form_valid(form)
+
+#     def get_success_url(self):
+#         return redirect('/products')
+
+class SellerProductUpdateView(View):
+
+    def get(self, request, *args, **kwargs):
+
+        product_id = kwargs['pk']
+        product_details = Product.objects.get(id=product_id)
+
+        product_form = ProductForm(instance=product_details)
+
+        return render(
+            request,
+            template_name='seller/product_update.html',
+            context={
+                "product_form": product_form,
+
+            })
+
+    def post(self, request, pk, *args, **kwargs):
+
+        product_details = Product.objects.get(id=pk)
+        product_form = ProductForm(request.POST, instance=product_details)
+
+        if product_form.is_valid():
+            product_form.instance.user = request.user
+            product_form.save()
+
+            return render(
+                request,
+                template_name='seller/product_update.html',
+                context={
+                    "product_form": product_form,
+                    "status": "Product Updated Successfully"
+
+                })
+
+        return render(
+            request,
+            template_name='seller/product_update.html',
+            context={
+                "product_form": product_form,
+
+            })

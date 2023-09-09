@@ -16,7 +16,11 @@ class User(AbstractUser):
         choices=TYPE_CHOICES,
         default="SELLER"
         )
-    profile_image = models.ImageField(blank=True, null=True)
+    profile_image = models.ImageField(
+        upload_to='authentication/images',
+        blank=True,
+        null=True
+        )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

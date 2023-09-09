@@ -11,4 +11,11 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
     price = models.FloatField()
-    image = models.ImageField()
+    image = models.ImageField(
+        upload_to='product/images',
+        blank=True,
+        null=True
+        )
+
+    def __str__(self):
+        return self.name
