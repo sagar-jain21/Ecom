@@ -2,6 +2,194 @@
 
 {% block body %}
 
+<div class="row">
+    <h2 class="text-center mt-3">Our Products</h2>
+    <div class="col-3">
+        <h4 class="mt-5 mb-5 ms-2">Electrical Appliances</h4>
+        {% for electrical in  electrical_appliances %}
+            <div class="card mb-5" style="width: 18rem;">
+                <img src="{{ MEDIA_ROOT }}{{ electrical.image.url }}" class="card-img-top" alt="..." width="150" height="250">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ electrical.name}}</h5>
+                    <p class="card-text">Rs {{ electrical.price }}</p>
+                    <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#test{{electrical.id}}" >View</a>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="test{{electrical.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Product Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <img src="{{ MEDIA_ROOT }}{{electrical.image.url}}" class="card-img-top" alt="..." width="150" height="250">
+                                    <h4>{{ electrical.name}}</h4>
+                                    <p>{{ electrical.description}}</p>
+                                    <p>Category :{{ electrical.category }}</p>
+                                    <h5 class="mt-2">Price: Rs {{ electrical.price}}</h5>
+                                </div>
+                                <div class="col-md-4">
+                                    {% comment %} <a href="{% url 'seller:update_product' electrical.id %}" class="btn btn-outline-success m-2">Update</a>
+                                    <a href="{% url 'seller:delete_product' electrical.id %}" class="btn btn-outline-danger m-2">Delete</a> {% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="col-3">
+        <h4 class="mt-5 mb-5 ms-2">Clothes</h4>
+        {% for cloth in clothes %}
+            <div class="card mb-5" style="width: 18rem;">
+                <img src="{{ MEDIA_ROOT }}{{cloth.image.url}}" class="card-img-top" alt="..." width="150" height="250">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ cloth.name}}</h5>
+                    <p class="card-text">Rs {{ cloth.price }}</p>
+                    <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#test{{cloth.id}}" >View</a>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="test{{cloth.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Product Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <img src="{{ MEDIA_ROOT }}{{cloth.image.url}}" class="card-img-top" alt="..." width="150" height="250">
+                                    <h4>{{ cloth.name}}</h4>
+                                    <p>{{ cloth.description}}</p>
+                                    <p>Category :{{ cloth.category }}</p>
+                                    <h5 class="mt-2">Price: Rs {{ cloth.price}}</h5>
+                                </div>
+                                <div class="col-md-4">
+                                    {% comment %} <a href="{% url 'seller:update_product' cloth.id %}" class="btn btn-outline-success m-2">Update</a>
+                                    <a href="{% url 'seller:delete_product' cloth.id %}" class="btn btn-outline-danger m-2">Delete</a> {% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+
+    <div class="col-3">
+        <h4 class="mt-5 mb-5 ms-2">Footwares</h4>
+        {% for footware in footwares %}
+            <div class="card mb-5" style="width: 18rem;">
+                <img src="{{ MEDIA_ROOT }}{{footware.image.url}}" class="card-img-top" alt="..." width="150" height="250">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ footware.name}}</h5>
+                    <p class="card-text">Rs {{ footware.price }}</p>
+                    <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#test{{footware.id}}" >View</a>
+                </div>
+            </div>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="test{{footware.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Product Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <img src="{{ MEDIA_ROOT }}{{footware.image.url}}" class="card-img-top" alt="..." width="150" height="250">
+                                    <h4>{{ footware.name}}</h4>
+                                    <p>{{ footware.description}}</p>
+                                    <p>Category :{{ footware.category }}</p>
+                                    <h5 class="mt-2">Price: Rs {{ footware.price}}</h5>
+                                </div>
+                                <div class="col-md-4">
+                                    {% comment %} <a href="{% url 'seller:update_product' footware.id %}" class="btn btn-outline-success m-2">Update</a>
+                                    <a href="{% url 'seller:delete_product' footware.id %}" class="btn btn-outline-danger m-2">Delete</a> {% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="col-3">
+        <h4 class="mt-5 mb-5 ms-2">Home Appliances</h4>
+        {% for homeapp in home_appliances %}
+            <div class="card mb-5" style="width: 18rem;">
+                <img src="{{ MEDIA_ROOT }}{{homeapp.image.url}}" class="card-img-top" alt="..." width="150" height="250">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ homeapp.name}}</h5>
+                    <p class="card-text">Rs {{ homeapp.price }}</p>
+                    <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#test{{homeapp.id}}" >View</a>
+                </div>
+            </div>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="test{{homeapp.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Product Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <img src="{{ MEDIA_ROOT }}{{homeapp.image.url}}" class="card-img-top" alt="..." width="150" height="250">
+                                    <h4>{{ homeapp.name}}</h4>
+                                    <p>{{ homeapp.description}}</p>
+                                    <p>Category :{{ homeapp.category }}</p>
+                                    <h5 class="mt-2">Price: Rs {{ homeapp.price}}</h5>
+                                </div>
+                                <div class="col-md-4">
+                                    {% comment %} <a href="{% url 'seller:update_product' homeapp.id %}" class="btn btn-outline-success m-2">Update</a>
+                                    <a href="{% url 'seller:delete_product' homeapp.id %}" class="btn btn-outline-danger m-2">Delete</a> {% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
 
 
 

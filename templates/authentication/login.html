@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load socialaccount %}
+
 {% block body %}
 
 <section class="vh-100" style="background-color: #eee;">
@@ -39,7 +41,8 @@
                     {% endif %}
 
                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                        <input type="submit" value="Sign In" name="Create User" class="btn btn-primary">
+                      <input type="submit" value="Sign In" name="Create User" class="btn btn-primary">&nbsp
+                      <a class="btn btn-primary text-center" href="{% provider_login_url 'google' %}">Sign Up With Google</a>
                     </div>
   
                   </form>

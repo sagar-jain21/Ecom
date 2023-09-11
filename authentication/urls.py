@@ -4,6 +4,7 @@ from authentication.views import (
     HomeView,
     LoginView,
     LogoutView,
+    DefaultView,
     )
 
 app_name = 'authentication'
@@ -13,4 +14,5 @@ urlpatterns = [
     path('home/', HomeView.as_view(), name="home"),
     path('login/', LoginView.as_view(), name="login"),
     path('logout/', LogoutView.as_view(), name="logout"),
+    path('', DefaultView.as_view(), name="default"),
 ]

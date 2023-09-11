@@ -1,7 +1,7 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from product.models import Product
 from django.views.generic.base import TemplateView
-from django.views.generic import DeleteView, UpdateView
+from django.views.generic import DeleteView
 from django.views.generic import View
 from product.forms import ProductForm
 
@@ -10,8 +10,14 @@ class SellerProducts(TemplateView):
 
     def get(self, request, *args, **kwargs):
 
+        if not request.user.is_authenticated:
+            return redirect('/login')
+
+        if request.user.type != 'SELLER':
+            return redirect('/home')
+
         product_form = ProductForm()
-        products = Product.objects.all()
+        products = Product.objects.filter(user=request.user)
 
         return render(
             request,
@@ -23,9 +29,39 @@ class SellerProducts(TemplateView):
         )
 
 
+class CategorizedProductView(TemplateView):
+
+    def get(self, request, category, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+            return redirect('/login')
+
+        if request.user.type != 'SELLER':
+            return redirect('/home')
+
+        product_form = ProductForm()
+        products = Product.objects.filter(
+            category__name__iexact=category
+            )
+        category_name = category
+
+        return render(
+            request,
+            template_name='seller/categorized_products.html',
+            context={
+                "all_products": products,
+                "product_form": product_form,
+                "category_name": category_name,
+            }
+        )
+
+
 class SellerProductsCreateView(TemplateView):
 
     def get(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+            return redirect('/login')
 
         product_form = ProductForm()
 
@@ -42,7 +78,8 @@ class SellerProductsCreateView(TemplateView):
         product_form = ProductForm(request.POST, request.FILES)
 
         if product_form.is_valid():
-            # #Commented logic will be used when we don't include the user field in the form
+            # #Commented logic will be used when we don't include
+            # #the user field in the form
             # product = product_form.save(commit=False)
             # product.user = request.user
             # product.save()
@@ -85,6 +122,9 @@ class SellerProductUpdateView(View):
 
     def get(self, request, *args, **kwargs):
 
+        if not request.user.is_authenticated:
+            return redirect('/login')
+
         product_id = kwargs['pk']
         product_details = Product.objects.get(id=product_id)
 
@@ -107,14 +147,7 @@ class SellerProductUpdateView(View):
             product_form.instance.user = request.user
             product_form.save()
 
-            return render(
-                request,
-                template_name='seller/product_update.html',
-                context={
-                    "product_form": product_form,
-                    "status": "Product Updated Successfully"
-
-                })
+            return redirect('/products')
 
         return render(
             request,

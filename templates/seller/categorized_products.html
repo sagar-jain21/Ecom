@@ -15,17 +15,17 @@
                 </button>
                 <a class="btn btn-secondary" href="{% url 'seller:seller_products' %}">Clear</a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="{% url 'seller:categorized_products' 'electrical appliances' %}">Electrical Appliances</a></li>
-                    <li><a class="dropdown-item" href="{% url 'seller:categorized_products' 'clothes' %}">Clothes</a></li>
-                    <li><a class="dropdown-item" href="{% url 'seller:categorized_products' 'footwares' %}">Footwares</a></li>
-                    <li><a class="dropdown-item" href="{% url 'seller:categorized_products' 'home appliances' %}">Home Appliances</a></li>
+                  <li><a class="dropdown-item" href="{% url 'seller:categorized_products' 'electrical appliances' %}">Electrical Appliances</a></li>
+                  <li><a class="dropdown-item" href="{% url 'seller:categorized_products' 'clothes' %}">Clothes</a></li>
+                  <li><a class="dropdown-item" href="{% url 'seller:categorized_products' 'footwares' %}">Footwares</a></li>
+                  <li><a class="dropdown-item" href="{% url 'seller:categorized_products' 'home appliances' %}">Home Appliances</a></li>
                 </ul>
               </div>
         </div>
     </div>
 
     <div class="row">
-    <div class="text-center mb-5 mt-5"><h1>Our Featured Products</h1></div>
+    <div class="text-center mb-5 mt-5"><h1>{{ category_name }}</h1></div>
         {% for product in all_products %}
             <div class="col-4">
                 <div class="card" style="width: 18rem;">
