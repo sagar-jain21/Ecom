@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from authentication.forms import CreateUserForm
 from django.contrib.auth import authenticate, login, logout
+from django.core.mail import send_mail
+from core import settings
 
 # Create your views here.
 
@@ -31,7 +33,15 @@ class RegisterView(TemplateView):
             # password = form.cleaned_data['password1']
             # new_user.set_password(password)
             # new_user.save()
+            new_user_email = form.cleaned_data['email']
             form.save()
+            send_mail(
+                subject='Registration Successful',
+                message='Welcome to Ecom, Your account has been created successfully.',
+                from_email='jainsagar619@gmail.com',
+                recipient_list=[new_user_email],
+                fail_silently=False
+            )
             return redirect('/login')
 
         return render(
