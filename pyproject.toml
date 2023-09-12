@@ -1,3 +1,2 @@
 [tool.isort]
-line-length = 79
 profile = 'black'

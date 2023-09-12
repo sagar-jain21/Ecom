@@ -4,9 +4,13 @@ from django.views.generic.base import TemplateView
 from django.views.generic import DeleteView
 from django.views.generic import View
 from product.forms import ProductForm
+from seller.permissions import IsSeller
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 
-class SellerProducts(TemplateView):
+class SellerProducts(TemplateView, APIView):
+    # permission_classes = [IsSeller]
 
     def get(self, request, *args, **kwargs):
 
@@ -41,6 +45,7 @@ class CategorizedProductView(TemplateView):
 
         product_form = ProductForm()
         products = Product.objects.filter(
+            user=request.user,
             category__name__iexact=category
             )
         category_name = category

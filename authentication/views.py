@@ -1,12 +1,17 @@
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
-from authentication.forms import CreateUserForm
 from django.contrib.auth import authenticate, login, logout
+from django.core.mail import EmailMessage
+from django.shortcuts import redirect, render
+
 # from django.core.mail import send_mail
 # from core import settings
 from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
+from django.views.generic import TemplateView
+from django.template import Context
+from django.template.loader import get_template
+
+from authentication.forms import CreateUserForm
 from product.models import Product
+
 # from django.utils.html import strip_tags
 
 
@@ -36,10 +41,14 @@ class RegisterView(TemplateView):
             # new_user.set_password(password)
             # new_user.save()
             new_user_email = form.cleaned_data['email']
+            user_first_name = form.cleaned_data['first_name']
             form.save()
-            html_template = 'authentication/signup_email.html'
-            html_message = render_to_string(html_template)
+            breakpoint()
+            # html_template = 'authentication/signup_email.html'
+            # html_message = render_to_string(html_template)
             # plain_message = strip_tags(html_message)   #method 2
+            context = {"user_first_name": user_first_name}
+            message = get_template("authentication/signup_email.html").render(context)
 
             def send_email(
                     to_list,
@@ -53,7 +62,7 @@ class RegisterView(TemplateView):
 
             send_email(
                 subject='Registration Successful',
-                message=html_message,
+                message=message,
                 to_list=[new_user_email],
             )
 
@@ -132,15 +141,19 @@ class HomeView(TemplateView):
             return redirect('/login')
 
         electrical_appliances = Product.objects.filter(
+            user=request.user,
             category__name__iexact='Electrical Appliances'
             )[:5]
         clothes = Product.objects.filter(
+            user=request.user,
             category__name__iexact='clothes'
             )[:5]
         footwares = Product.objects.filter(
+            user=request.user,
             category__name__iexact='footwares'
             )[:5]
         home_appliances = Product.objects.filter(
+            user=request.user,
             category__name__iexact='home appliances'
             )[:5]
 
