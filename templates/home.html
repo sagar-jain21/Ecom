@@ -1,9 +1,21 @@
 {% extends 'base.html' %}
 
 {% block body %}
-
 <div class="row">
-    <h2 class="text-center mt-3">Our Products</h2>
+    <div class="col-11">
+        <h2 class="text-center mt-3">Our Products</h2>
+    </div>
+    <div class="col-1">
+        {% if request.user.type == 'BUYER' %}
+            <a href="{% url 'buyer:cart' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-cart3 m-3" viewBox="0 0 16 16">
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+            </a>
+        {% endif %}
+    </div>
+</div>
+<div class="row">
     <div class="col-3">
         <h4 class="mt-5 mb-5 ms-2">Electrical Appliances</h4>
         {% for electrical in  electrical_appliances %}
@@ -33,10 +45,18 @@
                                     <p>{{ electrical.description}}</p>
                                     <p>Category :{{ electrical.category }}</p>
                                     <h5 class="mt-2">Price: Rs {{ electrical.price}}</h5>
+                                    {% if user_type == 'BUYER' %}
+                                        <form method="POST" action="{% url 'buyer:add_to_cart' electrical.id %}" class="mx-1 mx-md-4" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <input type="submit" value="Add To Cart" name="Add Product" class="btn btn-warning">
+                                        </form>
+                                    {% endif %}
                                 </div>
                                 <div class="col-md-4">
-                                    <a href="{% url 'seller:update_product' electrical.id %}" class="btn btn-outline-success m-2">Update</a>
-                                    <a href="{% url 'seller:delete_product' electrical.id %}" class="btn btn-outline-danger m-2">Delete</a>
+                                    {% if user_type == 'SELLER' %}
+                                        <a href="{% url 'seller:update_product' electrical.id %}" class="btn btn-outline-success m-2">Update</a>
+                                        <a href="{% url 'seller:delete_product' electrical.id %}" class="btn btn-outline-danger m-2">Delete</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -79,10 +99,18 @@
                                     <p>{{ cloth.description}}</p>
                                     <p>Category :{{ cloth.category }}</p>
                                     <h5 class="mt-2">Price: Rs {{ cloth.price}}</h5>
+                                    {% if user_type == 'BUYER' %}
+                                        <form method="POST" action="{% url 'buyer:add_to_cart' cloth.id %}" class="mx-1 mx-md-4" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <input type="submit" value="Add To Cart" name="Add Product" class="btn btn-warning">
+                                        </form>
+                                    {% endif %}
                                 </div>
                                 <div class="col-md-4">
-                                    <a href="{% url 'seller:update_product' cloth.id %}" class="btn btn-outline-success m-2">Update</a>
-                                    <a href="{% url 'seller:delete_product' cloth.id %}" class="btn btn-outline-danger m-2">Delete</a>
+                                    {% if user_type == 'SELLER' %}
+                                        <a href="{% url 'seller:update_product' cloth.id %}" class="btn btn-outline-success m-2">Update</a>
+                                        <a href="{% url 'seller:delete_product' cloth.id %}" class="btn btn-outline-danger m-2">Delete</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -126,10 +154,18 @@
                                     <p>{{ footware.description}}</p>
                                     <p>Category :{{ footware.category }}</p>
                                     <h5 class="mt-2">Price: Rs {{ footware.price}}</h5>
+                                    {% if user_type == 'BUYER' %}
+                                        <form method="POST" action="{% url 'buyer:add_to_cart' footware.id %}" class="mx-1 mx-md-4" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <input type="submit" value="Add To Cart" name="Add Product" class="btn btn-warning">
+                                        </form>
+                                    {% endif %}
                                 </div>
                                 <div class="col-md-4">
-                                    <a href="{% url 'seller:update_product' footware.id %}" class="btn btn-outline-success m-2">Update</a>
-                                    <a href="{% url 'seller:delete_product' footware.id %}" class="btn btn-outline-danger m-2">Delete</a>
+                                    {% if user_type == 'SELLER' %}
+                                        <a href="{% url 'seller:update_product' footware.id %}" class="btn btn-outline-success m-2">Update</a>
+                                        <a href="{% url 'seller:delete_product' footware.id %}" class="btn btn-outline-danger m-2">Delete</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -172,10 +208,18 @@
                                     <p>{{ homeapp.description}}</p>
                                     <p>Category :{{ homeapp.category }}</p>
                                     <h5 class="mt-2">Price: Rs {{ homeapp.price}}</h5>
+                                    {% if user_type == 'BUYER' %}
+                                        <form method="POST" action="{% url 'buyer:add_to_cart' homeapp.id %}" class="mx-1 mx-md-4" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <input type="submit" value="Add To Cart" name="Add Product" class="btn btn-warning">
+                                        </form>
+                                    {% endif %}
                                 </div>
                                 <div class="col-md-4">
-                                    <a href="{% url 'seller:update_product' homeapp.id %}" class="btn btn-outline-success m-2">Update</a>
-                                    <a href="{% url 'seller:delete_product' homeapp.id %}" class="btn btn-outline-danger m-2">Delete</a>
+                                    {% if user_type == 'SELLER' %}
+                                        <a href="{% url 'seller:update_product' homeapp.id %}" class="btn btn-outline-success m-2">Update</a>
+                                        <a href="{% url 'seller:delete_product' homeapp.id %}" class="btn btn-outline-danger m-2">Delete</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

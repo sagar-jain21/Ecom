@@ -43,7 +43,6 @@ class RegisterView(TemplateView):
             new_user_email = form.cleaned_data['email']
             user_first_name = form.cleaned_data['first_name']
             form.save()
-            breakpoint()
             # html_template = 'authentication/signup_email.html'
             # html_message = render_to_string(html_template)
             # plain_message = strip_tags(html_message)   #method 2
@@ -140,22 +139,36 @@ class HomeView(TemplateView):
         if not request.user.is_authenticated:
             return redirect('/login')
 
-        electrical_appliances = Product.objects.filter(
-            user=request.user,
-            category__name__iexact='Electrical Appliances'
-            )[:5]
-        clothes = Product.objects.filter(
-            user=request.user,
-            category__name__iexact='clothes'
-            )[:5]
-        footwares = Product.objects.filter(
-            user=request.user,
-            category__name__iexact='footwares'
-            )[:5]
-        home_appliances = Product.objects.filter(
-            user=request.user,
-            category__name__iexact='home appliances'
-            )[:5]
+        if request.user.type == 'SELLER':
+            electrical_appliances = Product.objects.filter(
+                user=request.user,
+                category__name__iexact='Electrical Appliances'
+                )[:5]
+            clothes = Product.objects.filter(
+                user=request.user,
+                category__name__iexact='clothes'
+                )[:5]
+            footwares = Product.objects.filter(
+                user=request.user,
+                category__name__iexact='footwares'
+                )[:5]
+            home_appliances = Product.objects.filter(
+                user=request.user,
+                category__name__iexact='home appliances'
+                )[:5]
+        else:
+            electrical_appliances = Product.objects.filter(
+                category__name__iexact='Electrical Appliances'
+                )[:5]
+            clothes = Product.objects.filter(
+                category__name__iexact='clothes'
+                )[:5]
+            footwares = Product.objects.filter(
+                category__name__iexact='footwares'
+                )[:5]
+            home_appliances = Product.objects.filter(
+                category__name__iexact='home appliances'
+                )[:5]
 
         return render(
             request,
@@ -165,6 +178,7 @@ class HomeView(TemplateView):
                 "clothes": clothes,
                 "footwares": footwares,
                 "home_appliances": home_appliances,
+                "user_type": request.user.type,
             }
         )
 

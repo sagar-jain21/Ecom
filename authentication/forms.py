@@ -23,6 +23,8 @@ class CreateUserForm(UserCreationForm):
         for visible in self.visible_fields():
             visible.required = True
 
+        self.fields['profile_image'].required = True
+
     class Meta:
         model = User
         fields = [

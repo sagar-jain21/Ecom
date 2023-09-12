@@ -13,12 +13,12 @@
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                   Filter
                 </button>
-                <a class="btn btn-secondary" href="{% url 'seller:seller_products' %}">Clear</a>
+                <a class="btn btn-secondary" href="{% url 'buyer:all_products' %}">Clear</a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                  <li><a class="dropdown-item" href="{% url 'seller:categorized_products' 'electrical appliances' %}">Electrical Appliances</a></li>
-                  <li><a class="dropdown-item" href="{% url 'seller:categorized_products' 'clothes' %}">Clothes</a></li>
-                  <li><a class="dropdown-item" href="{% url 'seller:categorized_products' 'footwares' %}">Footwares</a></li>
-                  <li><a class="dropdown-item" href="{% url 'seller:categorized_products' 'home appliances' %}">Home Appliances</a></li>
+                  <li><a class="dropdown-item" href="{% url 'buyer:categorized_products' 'electrical appliances' %}">Electrical Appliances</a></li>
+                  <li><a class="dropdown-item" href="{% url 'buyer:categorized_products' 'clothes' %}">Clothes</a></li>
+                  <li><a class="dropdown-item" href="{% url 'buyer:categorized_products' 'footwares' %}">Footwares</a></li>
+                  <li><a class="dropdown-item" href="{% url 'buyer:categorized_products' 'home appliances' %}">Home Appliances</a></li>
                 </ul>
               </div>
         </div>
@@ -49,16 +49,13 @@
                     <div class="modal-body">
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                     <img src="{{ MEDIA_ROOT }}{{product.image.url}}" class="card-img-top" alt="..." width="150" height="250">
                                     <h4>{{ product.name}}</h4>
                                     <p>{{ product.description}}</p>
                                     <p>Category :{{ product.category }}</p>
                                     <h5 class="mt-2">Price: Rs {{ product.price}}</h5>
-                                </div>
-                                <div class="col-md-4">
-                                    <a href="{% url 'seller:update_product' product.id %}" class="btn btn-outline-success m-2">Update</a>
-                                    <a href="{% url 'seller:delete_product' product.id %}" class="btn btn-outline-danger m-2">Delete</a>
+                                    <a href="#" class="btn btn-warning mt-3">Add to Cart</a>
                                 </div>
                             </div>
                         </div>

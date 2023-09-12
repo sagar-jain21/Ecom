@@ -4,12 +4,9 @@ from django.views.generic.base import TemplateView
 from django.views.generic import DeleteView
 from django.views.generic import View
 from product.forms import ProductForm
-from seller.permissions import IsSeller
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
 
 
-class SellerProducts(TemplateView, APIView):
+class SellerProducts(TemplateView):
     # permission_classes = [IsSeller]
 
     def get(self, request, *args, **kwargs):
@@ -17,11 +14,12 @@ class SellerProducts(TemplateView, APIView):
         if not request.user.is_authenticated:
             return redirect('/login')
 
-        if request.user.type != 'SELLER':
-            return redirect('/home')
+        if request.user.type == 'SELLER':
+            products = Product.objects.filter(user=request.user)
+        else:
+            products = Product.objects.all()
 
         product_form = ProductForm()
-        products = Product.objects.filter(user=request.user)
 
         return render(
             request,
@@ -33,7 +31,7 @@ class SellerProducts(TemplateView, APIView):
         )
 
 
-class CategorizedProductView(TemplateView):
+class CategorizedSellerProductView(TemplateView):
 
     def get(self, request, category, *args, **kwargs):
 
@@ -52,7 +50,7 @@ class CategorizedProductView(TemplateView):
 
         return render(
             request,
-            template_name='seller/categorized_products.html',
+            template_name='seller/categorized_seller_products.html',
             context={
                 "all_products": products,
                 "product_form": product_form,

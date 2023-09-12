@@ -4,7 +4,7 @@ from seller.views import (
     SellerProductsCreateView,
     SellerProductDeleteView,
     SellerProductUpdateView,
-    CategorizedProductView,
+    CategorizedSellerProductView,
 )
 
 app_name = "seller"
@@ -27,8 +27,8 @@ urlpatterns = [
         name="delete_product",
     ),
     path(
-        "categorized-products/<str:category>",
-        CategorizedProductView.as_view(),
-        name="categorized_products",
+        "categorized-seller-products/<str:category>",
+        CategorizedSellerProductView.as_view(),
+        name="categorized_seller_products",
     ),
 ]
