@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<a href="{% url 'seller:create_products' %}" class="btn btn-outline-primary m-3">Add Product</a>
+    {% if request.user.type == 'SELLER' %}
+        <a href="{% url 'seller:create_products' %}" class="btn btn-outline-primary m-3">Add Product</a>
+    {% endif %}
 <div class="container">
 
     <div class="row">
@@ -9,7 +11,7 @@
 
         </div>
         <div class="col-2">
-            <div class="dropdown">
+            <div class="dropdown mt-5">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                   Filter
                 </button>
@@ -55,10 +57,18 @@
                                     <p>{{ product.description}}</p>
                                     <p>Category :{{ product.category }}</p>
                                     <h5 class="mt-2">Price: Rs {{ product.price}}</h5>
+                                    {% if request.user.type == 'BUYER' %}
+                                        <form method="POST" action="{% url 'seller:add_to_cart' product.id %}" class="mx-1 mx-md-4" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <input type="submit" value="Add To Cart" name="Add Product" class="btn btn-warning">
+                                        </form>
+                                    {% endif %}
                                 </div>
                                 <div class="col-md-4">
-                                    <a href="{% url 'seller:update_product' product.id %}" class="btn btn-outline-success m-2">Update</a>
-                                    <a href="{% url 'seller:delete_product' product.id %}" class="btn btn-outline-danger m-2">Delete</a>
+                                    {% if request.user.type == 'SELLER' %}
+                                        <a href="{% url 'seller:update_product' product.id %}" class="btn btn-outline-success m-2">Update</a>
+                                        <a href="{% url 'seller:delete_product' product.id %}" class="btn btn-outline-danger m-2">Delete</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

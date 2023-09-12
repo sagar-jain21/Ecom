@@ -4,6 +4,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic import DeleteView
 from django.views.generic import View
 from product.forms import ProductForm
+from buyer.models import Cart
 
 
 class SellerProducts(TemplateView):
@@ -38,14 +39,15 @@ class CategorizedSellerProductView(TemplateView):
         if not request.user.is_authenticated:
             return redirect('/login')
 
-        if request.user.type != 'SELLER':
-            return redirect('/home')
+        if request.user.type == 'SELLER':
+            products = Product.objects.filter(
+                user=request.user,
+                category__name__iexact=category
+            )
+        else:
+            products = Product.objects.filter(category__name__iexact=category)
 
         product_form = ProductForm()
-        products = Product.objects.filter(
-            user=request.user,
-            category__name__iexact=category
-            )
         category_name = category
 
         return render(
@@ -159,3 +161,54 @@ class SellerProductUpdateView(View):
                 "product_form": product_form,
 
             })
+
+
+class CartView(TemplateView):
+    def post(self, request, id, *args, **kwargs):
+
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart.products.add(id)
+
+        return redirect('/home')
+
+    def get(self, request, *args, **kwargs):
+        # cart_products = Cart.objects.filter(user=request.user).values_list(
+        #     "products__id", "products__name"
+        # )
+        # cart = Cart.objects.get(user=request.user).products.all()
+
+        cart = Cart.objects.prefetch_related("products").filter(user=request.user).first()
+        if cart:
+            cart_products = cart.products.all()
+        else:
+            cart_products = None
+
+        return render(
+            request,
+            template_name="seller/cart.html",
+            context={
+                "cart_products": cart_products,
+            },
+        )
+
+
+class RemoveCartProductView(View):
+
+    def get(self, request, id, *args, **kwargs):
+
+        product = Product.objects.filter(id=id).first()
+
+        cart = Cart.objects.filter(products=product).first()
+
+        cart.products.remove(id)
+
+        return redirect('/cart')
+
+
+class DeleteCartView(View):
+
+    def post(self, request, *args, **kwargs):
+        cart = Cart.objects.get(user=request.user)
+        cart.delete()
+
+        return redirect("/cart")

@@ -9,7 +9,7 @@
         </div>
         <div class="col-2 mt-5">
             {% if cart_products %}
-                <form method="POST" action="{% url 'buyer:empty_cart' %}" class="mx-1 mx-md-4" enctype="multipart/form-data">
+                <form method="POST" action="{% url 'seller:empty_cart' %}" class="mx-1 mx-md-4" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="submit" value="Empty Cart" name="Add Product" class="btn btn-danger">
                 </form>
@@ -48,7 +48,7 @@
                                     <p>{{ product.description}}</p>
                                     <p>Category :{{ product.category }}</p>
                                     <h5 class="mt-2">Price: Rs {{ product.price}}</h5>
-                                    <a href="{% url 'buyer:remove_product' product.id %}" class="btn btn-danger mt-3">Remove From Cart</a>
+                                    <a href="{% url 'seller:remove_product' product.id %}" class="btn btn-danger mt-3">Remove From Cart</a>
                                 </div>
                             </div>
                         </div>
