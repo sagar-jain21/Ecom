@@ -3,3 +3,4 @@ env/
 *.pyc
 media/
 db.sqlite3
+static/
