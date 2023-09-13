@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
+{% load custom_tag %}
+
 {% block body %}
-    {% if request.user.type == "SELLER" %}
+    {% if request.user|has_group:"seller" %}
         <a href="{% url 'seller:create_products' %}" class="btn btn-outline-primary m-3">Add Product</a>
     {% endif %}
 <div class="container">
@@ -57,7 +59,7 @@
                                     <p>{{ product.description}}</p>
                                     <p>Category :{{ product.category }}</p>
                                     <h5 class="mt-2">Price: Rs {{ product.price}}</h5>
-                                    {% if request.user.type == 'BUYER' %}
+                                    {% if request.user|has_group:"buyer" %}
                                         <form method="POST" action="{% url 'seller:add_to_cart' product.id %}" class="mx-1 mx-md-4" enctype="multipart/form-data">
                                             {% csrf_token %}
                                             <input type="submit" value="Add To Cart" name="Add Product" class="btn btn-warning">
@@ -65,7 +67,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="col-md-4">
-                                    {% if request.user.type == 'SELLER' %}
+                                    {% if request.user|has_group:"seller" %}
                                         <a href="{% url 'seller:update_product' product.id %}" class="btn btn-outline-success m-2">Update</a>
                                         <a href="{% url 'seller:delete_product' product.id %}" class="btn btn-outline-danger m-2">Delete</a>
                                     {% endif %}

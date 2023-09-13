@@ -15,7 +15,7 @@ class SellerProducts(TemplateView):
         if not request.user.is_authenticated:
             return redirect('/login')
 
-        if request.user.type == 'SELLER':
+        if request.user.groups.filter(name='seller').exists():
             products = Product.objects.filter(user=request.user)
         else:
             products = Product.objects.all()
@@ -39,7 +39,7 @@ class CategorizedSellerProductView(TemplateView):
         if not request.user.is_authenticated:
             return redirect('/login')
 
-        if request.user.type == 'SELLER':
+        if request.user.groups.filter(name='seller').exists():
             products = Product.objects.filter(
                 user=request.user,
                 category__name__iexact=category
@@ -68,17 +68,23 @@ class SellerProductsCreateView(TemplateView):
         if not request.user.is_authenticated:
             return redirect('/login')
 
-        product_form = ProductForm()
+        if request.user.groups.filter(name='seller').exists():
+            product_form = ProductForm()
 
-        return render(
-            request,
-            template_name='seller/seller_products.html',
-            context={
-                "product_form": product_form,
-            }
-        )
+            return render(
+                request,
+                template_name='seller/seller_products.html',
+                context={
+                    "product_form": product_form,
+                }
+            )
+        else:
+            return redirect('/home')
 
     def post(self, request, *args, **kwargs):
+
+        if not request.user.groups.filter(name='seller').exists():
+            return redirect('/home')
 
         product_form = ProductForm(request.POST, request.FILES)
 
@@ -130,6 +136,9 @@ class SellerProductUpdateView(View):
         if not request.user.is_authenticated:
             return redirect('/login')
 
+        if not request.user.groups.filter(name='seller').exists():
+            return redirect('/home')
+
         product_id = kwargs['pk']
         product_details = Product.objects.get(id=product_id)
 
@@ -144,6 +153,9 @@ class SellerProductUpdateView(View):
             })
 
     def post(self, request, pk, *args, **kwargs):
+
+        if not request.user.groups.filter(name='seller').exists():
+            return redirect('/home')
 
         product_details = Product.objects.get(id=pk)
         product_form = ProductForm(request.POST, instance=product_details)
@@ -166,6 +178,9 @@ class SellerProductUpdateView(View):
 class CartView(TemplateView):
     def post(self, request, id, *args, **kwargs):
 
+        if not request.user.groups.filter(name='buyer').exists():
+            return redirect('/home')
+
         cart, created = Cart.objects.get_or_create(user=request.user)
         cart.products.add(id)
 
@@ -176,6 +191,9 @@ class CartView(TemplateView):
         #     "products__id", "products__name"
         # )
         # cart = Cart.objects.get(user=request.user).products.all()
+
+        if not request.user.groups.filter(name='buyer').exists():
+            return redirect('/home')
 
         cart = Cart.objects.prefetch_related("products").filter(user=request.user).first()
         if cart:
@@ -196,6 +214,9 @@ class RemoveCartProductView(View):
 
     def get(self, request, id, *args, **kwargs):
 
+        if not request.user.groups.filter(name='buyer').exists():
+            return redirect('/home')
+
         product = Product.objects.filter(id=id).first()
 
         cart = Cart.objects.filter(products=product).first()
@@ -208,6 +229,10 @@ class RemoveCartProductView(View):
 class DeleteCartView(View):
 
     def post(self, request, *args, **kwargs):
+
+        if not request.user.groups.filter(name='buyer').exists():
+            return redirect('/home')
+
         cart = Cart.objects.get(user=request.user)
         cart.delete()
 
