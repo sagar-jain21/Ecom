@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load custom_tag %}
+
 {% block body %}
 <div class="row">
     <div class="col-11">
@@ -47,7 +49,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="col-md-4">
-                                    {% if request.user.type == 'SELLER' %}
+                                    {% if request.user|has_group:"seller" %}
                                         <a href="{% url 'seller:update_product' electrical.id %}" class="btn btn-outline-success m-2">Update</a>
                                         <a href="{% url 'seller:delete_product' electrical.id %}" class="btn btn-outline-danger m-2">Delete</a>
                                     {% endif %}
